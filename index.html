@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mi Tetris en JS</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+ 
+    <div id="start-screen" class="overlay">
+        <div class="start-box">
+            <h1>TETRIS</h1>
+            <p>Encaja las piezas y suma puntos</p>
+            <button id="start-btn">▶ JUGAR</button>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="game-container">
+            <div class="info">
+                <h1>TETRIS</h1>
+                <p>Puntos: <span id="score">0</span></p>
+                <div class="controls">
+                    <p>⬅️ ➡️ Mover</p>
+                    <p>⬇️ Bajar rápido</p>
+                    <p>⬆️ Rotar pieza</p>
+                </div>
+            </div>
+            <canvas id="tetris" width="240" height="400"></canvas>
+        </div>
+
+        <div class="mobile-controls">
+            <div class="d-pad">
+                <button id="btn-left" aria-label="Izquierda">◀</button>
+                <button id="btn-down" aria-label="Bajar">▼</button>
+                <button id="btn-right" aria-label="Derecha">▶</button>
+            </div>
+            <button id="btn-rotate" class="btn-action" aria-label="Rotar">↻</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
