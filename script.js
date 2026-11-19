@@ -202,9 +202,14 @@ let dropCounter = 0;
 let dropInterval = 750; 
 let lastTime = 0;
 let isGameStarted = false;
+let isPaused = false;
+let animationId = null;
+
+const playBtn = document.getElementById('play-btn');
+const pauseBtn = document.getElementById('pause-btn');
 
 function update(time = 0) {
-    if (!isGameStarted) return;
+    if (!isGameStarted || isPaused) return;
 
     const deltaTime = time - lastTime;
     lastTime = time;
@@ -215,20 +220,43 @@ function update(time = 0) {
     }
 
     draw();
-    requestAnimationFrame(update);
+    animationId = requestAnimationFrame(update);
 }
 
-startBtn.addEventListener('click', () => {
+function startGame() {
     startScreen.classList.add('hidden');
     isGameStarted = true;
+    isPaused = false;
     lastTime = performance.now();
     playerReset();
     updateScore();
-    update();
-});
+    cancelAnimationFrame(animationId);
+    update(lastTime);
+}
+
+function pauseGame() {
+    if (!isGameStarted || isPaused) return;
+    isPaused = true;
+    cancelAnimationFrame(animationId);
+}
+
+function resumeGame() {
+    if (!isGameStarted) {
+        startGame();
+        return;
+    }
+    if (!isPaused) return;
+    isPaused = false;
+    lastTime = performance.now(); // evita que la pieza caiga de golpe al reanudar
+    update(lastTime);
+}
+
+startBtn.addEventListener('click', startGame);
+pauseBtn.addEventListener('click', pauseGame);
+playBtn.addEventListener('click', resumeGame);
 
 document.addEventListener('keydown', event => {
-    if (!isGameStarted) return;
+    if (!isGameStarted || isPaused) return;
 
     if (event.key === 'ArrowLeft') {
         playerMove(-1);
@@ -242,14 +270,14 @@ document.addEventListener('keydown', event => {
 });
 
 document.getElementById('btn-left').addEventListener('click', () => {
-    if (isGameStarted) playerMove(-1);
+    if (isGameStarted && !isPaused) playerMove(-1);
 });
 document.getElementById('btn-right').addEventListener('click', () => {
-    if (isGameStarted) playerMove(1);
+    if (isGameStarted && !isPaused) playerMove(1);
 });
 document.getElementById('btn-down').addEventListener('click', () => {
-    if (isGameStarted) playerDrop();
+    if (isGameStarted && !isPaused) playerDrop();
 });
 document.getElementById('btn-rotate').addEventListener('click', () => {
-    if (isGameStarted) playerRotate();
+    if (isGameStarted && !isPaused) playerRotate();
 });
